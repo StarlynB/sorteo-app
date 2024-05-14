@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { endpoints, enviroment as env } from 'src/enviroment';
 import { Subject } from 'rxjs';
 
 
-@Injectable({
-  providedIn: 'root'
+Injectable({
+  providedIn: 'root',
 })
+
 export class PaticipantesService {
+
   participantsChanged = new Subject<{ name: string, department: string }[]>();
-  constructor(private _http: HttpClient) { }
+  constructor() { }
 
   //save data
   saveData(key: string, data: any) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PaticipantesService } from '../../services/paticipantes.service';
 import { PrizeService } from '../../services/prize.service';
+import { PaticipantesService } from '../../services/paticipantes.service';
 
 @Component({
   selector: 'app-sorteo',
