@@ -1,0 +1,216 @@
+<div
+  class="flex justify-center pt-3 bg-gradient-to-r from-teal-400 to-blue-500"
+>
+  <h1 class="text-3xl font-mono mb-3 text-center text-white">
+    <span class="underline decoration-pink-500">
+      Participantes del Sorteo
+    </span>
+  </h1>
+</div>
+
+<div
+  class="flex justify-center items-start h-screen bg-gradient-to-r from-teal-400 to-blue-500"
+>
+  <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+    <div class="flex justify-between">
+      <div class="flex flex-col w-full">
+        <input
+          type="text"
+          #participantName
+          placeholder="Nombre del participante"
+          class="border text-wrap border-gray-200 rounded-l-lg px-3 py-2 mb-2 focus:outline-none focus:ring focus:border-blue-500"
+          (keyup.enter)="
+            addParticipant(participantName.value, department.value);
+            participantName.value = '';
+            department.value = ''
+          "
+        />
+        <input
+          type="text"
+          #department
+          placeholder="Departamento"
+          class="border border-gray-200 text-wrap rounded-l-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+        />
+      </div>
+      <button
+        class="bg-blue-500 text-white px-2 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500 flex items-center"
+        (click)="
+          addParticipant(participantName.value, department.value);
+          participantName.value = '';
+          department.value = ''
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m-8-8h16"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex justify-end font-semibold">
+      Cantidad: {{ participants.length }}
+    </div>
+    <div
+      class="max-h-48 overflow-y-auto border border-gray-200 rounded-lg mb-6 relative scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-gray-100 via-transparent to-transparent blur"
+      ></div>
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Nombre</th>
+            <th class="px-4 py-2">Departamento</th>
+            <th class="px-4 py-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="participants.length > 0; else noParticipants">
+            <tr *ngFor="let participant of participants">
+              <td class="border px-4 py-2">{{ participant.name }}</td>
+              <td class="border px-4 py-2">{{ participant.department }}</td>
+              <td class="border px-4 py-2">
+                <button
+                  class="text-red-500 hover:text-red-700 focus:outline-none focus:text-red-700 transition duration-200 flex items-center"
+                  (click)="deleteParticipant(participant)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6 animate-trash"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #noParticipants>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-gray-400">
+                No hay participantes aún
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between mb-3">
+      <app-prizes
+        [prizes]="prizes"
+        (prizesChange)="updatePrizes($event)"
+      ></app-prizes>
+
+      <div class="flex items-end">
+        <button
+          class="bg-sky-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-500"
+          (click)="pickWinner()"
+        >
+          Elegir
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="countdown > 0" class="text-center mb-4">
+      <p class="text-lg font-semibold">
+        El ganador será anunciado en
+        <span class="countdown">{{ countdown }}</span> segundos...
+      </p>
+    </div>
+
+    <div
+      class="max-h-30 overflow-y-auto border border-gray-200 rounded-lg mb-6 relative scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-gray-100 via-transparent to-transparent blur"
+      ></div>
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Nombre</th>
+            <th class="px-4 py-2">Departamento</th>
+            <th class="px-4 py-2">Premio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="winners.length > 0; else noWinners">
+            <tr *ngFor="let winnerInfo of winners; let i = index">
+              <td class="border px-4 py-2">{{ winnerInfo.name }}</td>
+              <td class="border px-4 py-2">{{ winnerInfo.department }}</td>
+              <td class="border px-4 py-2">{{ winnerInfo.prize }}</td>
+            </tr>
+          </ng-container>
+          <ng-template #noWinners>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-gray-400">
+                No hay ganadores aún
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="winner" class="mt-8">
+      <div
+        class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg absolute top-10 right-10 highlight"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 4a6 6 0 100 12 6 6 0 000-12zM0 10a10 10 0 1120 0 10 10 0 01-20 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm leading-5 font-medium">
+              ¡El ganador es: {{ winner }} del departamento
+              {{ winningDepartment }}!
+            </p>
+            <p class="text-sm leading-5 font-medium">
+              Premio: {{ winningPrize }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <button
+        class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500"
+        (click)="resetWinner()"
+      >
+        Resetear
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer
+  class="flex align-bottom justify-center text-black font-normal bg-gradient-to-r from-teal-400 to-blue-500"
+>
+  Derechos Reservados. Republica Dominicana 2024
+</footer>

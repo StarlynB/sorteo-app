@@ -1,0 +1,43 @@
+<div>
+  <div
+    class="max-h-28 overflow-y-auto border border-gray-200 rounded-lg mb-6 relative scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100"
+  >
+    <table class="table-fixed w-full">
+      <tbody>
+        <tr *ngFor="let prize of prizes; let i = index">
+          <td class="px-4 py-2">
+            <input
+              type="text"
+              [(ngModel)]="prizes[i].name"
+              class="w-full border-none bg-transparent"
+            />
+          </td>
+          <td class="px-4 py-2">
+            <button class="text-red-500" (click)="removePrize(i)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <button
+    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-500"
+    (click)="addPrize()"
+  >
+    Agregar Premio
+  </button>
+</div>
